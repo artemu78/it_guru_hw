@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "skills": {
+    "github-actions-docs": {
+      "source": "xixu-me/skills",
+      "sourceType": "github",
+      "computedHash": "e7babb077d50cd88fb8c0e168373c8a560d056b540f364cb4892191bf524f5ee"
+    },
+    "suggest-lucide-icons": {
+      "source": "nweii/agent-stuff",
+      "sourceType": "github",
+      "computedHash": "e65300bc92c624bdaadda1a334d94080e5a9e24ba31f4c41a0e930476b311a05"
+    },
+    "typescript-docs": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "computedHash": "9e2c39b8a9ea569feb0c90080b10a71371e2d2d8ffb35de4fc5f7afe2a442f67"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "12bab0ca6a45898a9b7eed06260adfb1f91cddbba02c689b680cebb5d9c2420c"
+    },
+    "zustand": {
+      "source": "vercel-labs/json-render",
+      "sourceType": "github",
+      "computedHash": "41cb7e8b24638b78524e9b71a3fcd6f54a672009526b1643920a258f3baccb32"
+    }
+  }
+}
