@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { X } from 'lucide-react';
@@ -18,6 +18,14 @@ interface AddProductModalProps {
   onSuccess: () => void;
 }
 
+/** Stitch export: bg-inputBg, focus:border-primary (#2F3AE3), focus:ring-0 */
+const inputDefault =
+  'w-full rounded-xl border border-transparent bg-[#F3F4F6] px-4 py-3 text-[15px] text-gray-700 outline-none transition-[border-color] placeholder:text-gray-400 focus:border-[#2F3AE3] focus:ring-0';
+
+/** SKU: Stitch static “active” border + indigo focus */
+const inputSku =
+  'w-full rounded-xl border-2 border-[#D1D5FF] bg-[#F3F4F6] px-4 py-3 text-[15px] text-gray-700 outline-none transition-[border-color] placeholder:text-gray-400 focus:border-[#A5B4FC] focus:ring-0';
+
 export default function AddProductModal({ onClose, onSuccess }: AddProductModalProps) {
   const addProduct = useProductStore((state) => state.addProduct);
 
@@ -26,7 +34,7 @@ export default function AddProductModal({ onClose, onSuccess }: AddProductModalP
     handleSubmit,
     formState: { errors },
   } = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(productSchema) as Resolver<ProductFormData>,
   });
 
   const onSubmit = (data: ProductFormData) => {
@@ -46,71 +54,106 @@ export default function AddProductModal({ onClose, onSuccess }: AddProductModalP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-[20px] w-full max-w-[500px] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-grey-light">
-          <h2 className="text-xl font-bold text-[#333]">Добавить товар</h2>
-          <button 
-            onClick={onClose}
-            className="p-1 hover:bg-grey-light rounded-full transition-colors bg-transparent border-none"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-product-modal-title"
+    >
+      <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-300">
+        <header className="flex items-center justify-between border-b border-gray-100 px-8 py-6">
+          <h2
+            id="add-product-modal-title"
+            className="flex items-center gap-2 text-2xl font-bold text-gray-800 font-inter"
           >
-            <X className="w-6 h-6 text-grey-medium" />
+            Добавить товар
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="shrink-0 text-gray-400 transition-colors hover:text-gray-600 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F3AE3]"
+            aria-label="Закрыть"
+          >
+            <X className="h-6 w-6" />
           </button>
-        </div>
+        </header>
 
-        <form onSubmit={handleSubmit(onSubmit as any)} className="p-6 flex flex-col gap-4"> {/* eslint-disable-line @typescript-eslint/no-explicit-any */}
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-grey-dark">Наименование</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-8">
+          <div className="space-y-2">
+            <label htmlFor="add-product-title" className="block text-sm font-medium text-gray-500">
+              Наименование
+            </label>
             <input
+              id="add-product-title"
               {...register('title')}
-              className="bg-[#f3f3f3] border-none rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20"
+              className={inputDefault}
               placeholder="Введите наименование"
+              autoComplete="off"
             />
-            {errors.title && <span className="text-red-500 text-xs">{errors.title.message}</span>}
+            {errors.title && (
+              <span className="text-[13px] text-[#f11010]">{errors.title.message}</span>
+            )}
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-grey-dark">Цена, ₽</label>
+          <div className="space-y-2">
+            <label htmlFor="add-product-price" className="block text-sm font-medium text-gray-500">
+              Цена, ₽
+            </label>
             <input
+              id="add-product-price"
               {...register('price')}
               type="number"
-              className="bg-[#f3f3f3] border-none rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20"
+              min={0}
+              step="any"
+              className={inputDefault}
               placeholder="0"
             />
-            {errors.price && <span className="text-red-500 text-xs">{errors.price.message}</span>}
+            {errors.price && (
+              <span className="text-[13px] text-[#f11010]">{errors.price.message}</span>
+            )}
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-grey-dark">Вендор</label>
+          <div className="space-y-2">
+            <label htmlFor="add-product-vendor" className="block text-sm font-medium text-gray-500">
+              Вендор
+            </label>
             <input
+              id="add-product-vendor"
               {...register('vendor')}
-              className="bg-[#f3f3f3] border-none rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20"
+              className={inputDefault}
               placeholder="Введите вендора"
+              autoComplete="off"
             />
-            {errors.vendor && <span className="text-red-500 text-xs">{errors.vendor.message}</span>}
+            {errors.vendor && (
+              <span className="text-[13px] text-[#f11010]">{errors.vendor.message}</span>
+            )}
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-grey-dark">Артикул</label>
+          <div className="space-y-2">
+            <label htmlFor="add-product-sku" className="block text-sm font-medium text-gray-500">
+              Артикул
+            </label>
             <input
+              id="add-product-sku"
               {...register('sku')}
-              className="bg-[#f3f3f3] border-none rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20"
+              className={inputSku}
               placeholder="Введите артикул"
+              autoComplete="off"
             />
-            {errors.sku && <span className="text-red-500 text-xs">{errors.sku.message}</span>}
+            {errors.sku && <span className="text-[13px] text-[#f11010]">{errors.sku.message}</span>}
           </div>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-grey-light rounded-lg text-grey-dark hover:bg-grey-light transition-colors font-semibold bg-transparent"
+              className="flex-1 rounded-xl border border-gray-200 py-4 text-[15px] font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F3AE3]"
             >
               Отмена
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#1d26c0] transition-colors font-semibold"
+              className="flex-1 rounded-xl bg-[#2F3AE3] py-4 text-[15px] font-semibold text-white shadow-lg shadow-blue-200 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F3AE3]"
             >
               Сохранить
             </button>

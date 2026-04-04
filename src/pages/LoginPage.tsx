@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { User, Lock, Eye, EyeOff, CheckSquare, Square } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import logoUrl from '../assets/logo.svg';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,10 +35,10 @@ export default function LoginPage() {
     setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(loginSchema) as Resolver<LoginFormData>,
     defaultValues: {
       username: 'emilys', // DummyJSON test user
-      password: 'emilyspassword',
+      password: 'emilyspass',
       rememberMe: false,
     },
   });
@@ -81,11 +82,9 @@ export default function LoginPage() {
     <div className="min-h-screen w-full bg-[#f6f6f6] flex items-center justify-center p-4">
       <div className="bg-white max-w-[492px] w-full rounded-[40px] shadow-[0px_24px_32px_0px_rgba(0,0,0,0.04)] overflow-hidden p-[6px]">
         <div className="bg-gradient-to-b from-[rgba(35,35,35,0.03)] to-[rgba(35,35,35,0)] border border-[#ededed] rounded-[34px] p-[48px] flex flex-col items-center gap-[32px]">
-          {/* Logo Placeholder */}
-          <div className="w-[52px] h-[52px] bg-white rounded-full flex items-center justify-center shadow-[0px_0px_0px_2px_white,0px_12px_8px_0px_rgba(0,0,0,0.03)] border border-[#ededed]">
-             <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center">
-                <div className="w-4 h-4 border-2 border-white rotate-45" />
-             </div>
+          {/* Logo */}
+          <div className="w-[68px] h-[74px] flex items-center justify-center">
+             <img src={logoUrl} alt="Aiti Guru Logo" className="w-full h-full block" />
           </div>
 
           <div className="text-center flex flex-col gap-[12px]">
@@ -97,7 +96,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit as any)} className="w-full flex flex-col gap-[20px]"> {/* eslint-disable-line @typescript-eslint/no-explicit-any */}
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-[20px]">
             <div className="flex flex-col gap-[16px]">
               {/* Login Field */}
               <div className="flex flex-col gap-[6px]">

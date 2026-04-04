@@ -1,0 +1,34 @@
+---
+description: "Aiti Guru homework: React/TS/Zustand/Tailwind stack, DummyJSON APIs, and functional requirements from hw.md"
+globs:
+  - "src/**/*"
+alwaysApply: false
+---
+
+## Source of truth
+
+- Functional and technical requirements: @hw.md (Russian spec). Before changing behavior, align with it.
+
+## Stack (non-negotiable)
+
+- React 18+, TypeScript with **strict** typing (no weakening `strict` to “make it compile”).
+- State: **Zustand** for app/auth/table state (e.g. sort persisted as required).
+- UI: **Tailwind** for styling.
+- Icons: **Lucide** only; when choosing icons, use the **suggest-lucide-icons** skill.
+
+## Data & auth
+
+- Products: [DummyJSON Products](https://dummyjson.com/docs/products) (list, loading states, search via API where required).
+- Login: [DummyJSON Auth](https://dummyjson.com/docs/auth); show field-level or inline errors on API failure; “Создать” link is non-functional per spec.
+- **Session persistence**: checkbox ON → persist token across browser restarts (e.g. `localStorage`); OFF → session ends when the **tab** closes (e.g. `sessionStorage` or equivalent).
+
+## Homework-specific UI logic
+
+- Rating **&lt; 3.5**: highlight in red.
+- `refresh-ccw` (Lucide): refresh table data; `list-filter`: sort asc/desc with visible sort state (design at your discretion).
+- Row actions menu (three dots in circle): **placeholder** only.
+- “Add product”: form fields name, price, vendor, SKU; **no** real API save; **toast** on success.
+
+## Browser
+
+- Target latest **Google Chrome** for behavior and layout checks.
