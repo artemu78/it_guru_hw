@@ -28,6 +28,7 @@ export default function ProductsPageBody() {
     setSort,
     sortBy,
     total,
+    order,
   } = useProductStore(
     useShallow((s) => ({
       products: s.products,
@@ -36,12 +37,14 @@ export default function ProductsPageBody() {
       setSort: s.setSort,
       sortBy: s.sortBy,
       total: s.total,
+      order: s.order,
     })),
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const toggleRowSelection = (id: number) => {
@@ -88,6 +91,14 @@ export default function ProductsPageBody() {
     }, 3000);
   };
 
+  const sortLabel = (() => {
+    if (!sortBy) return 'Сортировка';
+    const base =
+      sortBy === 'price' ? 'Цена' : sortBy === 'rating' ? 'Оценка' : 'Название';
+    const suffix = order === 'desc' ? ' ↓' : order === 'asc' ? ' ↑' : '';
+    return `${base}${suffix}`;
+  })();
+
   return (
     <>
       {toast && (
@@ -96,15 +107,22 @@ export default function ProductsPageBody() {
         </div>
       )}
 
-      <main className="bg-white rounded-[12px] p-[30px] shadow-sm flex flex-col gap-[40px]">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[20px] font-bold text-[#333] font-cairo">Все позиции</h2>
+      <main className="bg-white rounded-[12px] p-4 sm:p-[30px] shadow-sm flex flex-col gap-6 sm:gap-[40px]">
+        <div className="flex items-start sm:items-center justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-[20px] font-bold text-[#333] font-cairo">Все позиции</h2>
+            <p className="text-[13px] text-grey-medium sm:hidden">
+              Показано <span className="text-[#333]">1-{products.length}</span> из{' '}
+              <span className="text-[#333]">{total}</span>
+            </p>
+          </div>
 
-          <div className="flex items-center gap-[8px]">
+          <div className="flex items-center gap-[8px] shrink-0">
             <button
               type="button"
               onClick={() => fetchProducts()}
               className="p-[10px] rounded-[8px] border border-[#ececeb] bg-white hover:bg-grey-light transition-colors"
+              aria-label="Обновить"
             >
               <RefreshCcw
                 className={cn(
@@ -114,18 +132,213 @@ export default function ProductsPageBody() {
               />
             </button>
 
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="bg-primary text-[#ebf3ea] px-[20px] py-[10px] rounded-[6px] flex items-center gap-[15px] font-semibold text-[14px] font-cairo hover:bg-[#1d26c0] transition-colors"
-            >
-              <CirclePlus className="w-[22px] h-[22px]" />
-              Добавить
-            </button>
+            <div className="relative flex items-center gap-[8px]">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="bg-primary text-[#ebf3ea] px-[14px] sm:px-[20px] py-[10px] rounded-[6px] flex items-center gap-[10px] sm:gap-[15px] font-semibold text-[14px] font-cairo hover:bg-[#1d26c0] transition-colors"
+              >
+                <CirclePlus className="w-[22px] h-[22px]" />
+                <span className="hidden sm:inline">Добавить</span>
+                <span className="sm:hidden">Добавить товар</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsMobileFilterOpen((v) => !v)}
+                className="sm:hidden p-[10px] rounded-[8px] border border-[#ececeb] bg-white hover:bg-grey-light transition-colors"
+                aria-haspopup="menu"
+                aria-expanded={isMobileFilterOpen}
+                aria-label="Фильтры"
+              >
+                <ListFilter className="w-[22px] h-[22px] text-grey-medium" />
+              </button>
+
+              {isMobileFilterOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    aria-hidden
+                  />
+                  <div className="absolute right-0 top-[52px] z-50 w-[220px] rounded-[12px] border border-[#ececeb] bg-white shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                    <div className="px-4 py-3 text-[12px] font-semibold text-grey-medium">
+                      {sortLabel}
+                    </div>
+                    <div className="h-px bg-[#ececeb]" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileFilterOpen(false);
+                        setSort('rating');
+                      }}
+                      className={cn(
+                        'w-full text-left px-4 py-3 text-[14px] font-semibold font-cairo hover:bg-grey-light transition-colors',
+                        sortBy === 'rating' && 'text-primary',
+                      )}
+                    >
+                      По оценке
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileFilterOpen(false);
+                        setSort('price');
+                      }}
+                      className={cn(
+                        'w-full text-left px-4 py-3 text-[14px] font-semibold font-cairo hover:bg-grey-light transition-colors',
+                        sortBy === 'price' && 'text-primary',
+                      )}
+                    >
+                      По цене
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileFilterOpen(false);
+                        setSort('title');
+                      }}
+                      className={cn(
+                        'w-full text-left px-4 py-3 text-[14px] font-semibold font-cairo hover:bg-grey-light transition-colors',
+                        sortBy === 'title' && 'text-primary',
+                      )}
+                    >
+                      По названию
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="relative overflow-x-auto">
+        <div className="sm:hidden">
+          <div className="flex flex-col gap-3">
+            {products.map((product) => {
+              const selected = selectedIds.has(product.id);
+              return (
+                <div
+                  key={product.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => toggleRowSelection(product.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleRowSelection(product.id);
+                    }
+                  }}
+                  className={cn(
+                    'rounded-[12px] border border-[#ececeb] bg-white p-4 transition-[background-color,border-color] cursor-pointer',
+                    'hover:bg-grey-light/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
+                  )}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="mt-[2px] shrink-0">
+                      {selected ? (
+                        <CheckSquare
+                          className="w-[22px] h-[22px] text-primary"
+                          strokeWidth={1.75}
+                        />
+                      ) : (
+                        <Square
+                          className="w-[22px] h-[22px] text-grey-medium"
+                          strokeWidth={1.5}
+                        />
+                      )}
+                    </div>
+
+                    <div className="w-[56px] h-[56px] bg-[#c4c4c4] rounded-[10px] overflow-hidden shrink-0">
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="text-[15px] font-bold text-[#161919] font-cairo line-clamp-2">
+                            {product.title}
+                          </div>
+                          <div className="text-[13px] text-grey-medium font-cairo">
+                            {product.category}
+                          </div>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <div className="text-[15px] font-mono text-[#222]">
+                            {Math.floor(product.price).toLocaleString('ru-RU')}
+                            <span className="text-grey-medium">,00</span>
+                          </div>
+                          <div className="text-[13px] font-open">
+                            <span
+                              className={cn(
+                                product.rating < 3.5
+                                  ? 'text-[#f11010]'
+                                  : 'text-black',
+                              )}
+                            >
+                              {product.rating}
+                            </span>
+                            <span className="text-black">/5</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div>
+                          <div className="text-[11px] uppercase tracking-wide text-grey-medium">
+                            Вендор
+                          </div>
+                          <div className="text-[13px] font-bold text-black font-open">
+                            {product.brand || 'N/A'}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[11px] uppercase tracking-wide text-grey-medium">
+                            Артикул
+                          </div>
+                          <div className="text-[13px] text-black font-open">
+                            {product.sku || product.id}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-end gap-3">
+                        <button
+                          type="button"
+                          aria-label="Добавить"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert('not implemented');
+                          }}
+                          className="bg-primary p-[4px] rounded-[23px] flex items-center justify-center w-[52px] h-[30px] cursor-pointer border-0 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                        >
+                          <Plus className="text-white w-6 h-6" />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Действия"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert('not implemented');
+                          }}
+                          className="p-0 border-0 bg-transparent cursor-pointer rounded hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                        >
+                          <CircleEllipsis className="w-8 h-8 text-grey-medium" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="relative overflow-x-auto hidden sm:block">
           {loading && (
             <div className="absolute top-0 left-0 w-full h-[2px] bg-grey-light overflow-hidden z-10">
               <div className="h-full bg-primary animate-progress-indeterminate w-[30%]" />
@@ -301,7 +514,7 @@ export default function ProductsPageBody() {
           </table>
         </div>
 
-        <div className="flex items-center justify-between py-[11px]">
+        <div className="hidden sm:flex items-center justify-between py-[11px]">
           <p className="text-[18px] text-[#969b9f]">
             Показано{' '}
             <span className="text-[#333]">
