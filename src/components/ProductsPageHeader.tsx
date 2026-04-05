@@ -27,7 +27,7 @@ export default function ProductsPageHeader() {
 
   return (
     <header className="relative bg-white rounded-[10px] px-4 py-4 sm:px-[30px] sm:h-[105px] flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm gap-4">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 sm:w-[200px] sm:shrink-0">
         <h1 className="text-[24px] font-bold text-[#202020] font-cairo">Товары</h1>
 
         <button
