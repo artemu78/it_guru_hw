@@ -52,7 +52,7 @@ export default function ProductsPageHeader() {
         </div>
       </div>
 
-      <div className="relative shrink-0 hidden sm:flex items-center justify-end w-[200px]">
+      <div className="shrink-0 hidden sm:flex items-center justify-end w-[200px]">
         <button
           type="button"
           onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
