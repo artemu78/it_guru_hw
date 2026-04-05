@@ -69,7 +69,7 @@ export default function ProductsPageHeader() {
             onClick={() => setIsUserMenuOpen(false)}
             aria-hidden
           />
-          <div className="absolute top-[72px] right-4 sm:top-[55px] sm:right-0 w-48 bg-white rounded-md shadow-lg py-1 border border-grey-light z-50 animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-[72px] right-4 sm:top-[55px] sm:right-[30px] w-48 bg-white rounded-md shadow-lg py-1 border border-grey-light z-50 animate-in fade-in zoom-in-95 duration-200">
             <button
               type="button"
               onClick={logout}
