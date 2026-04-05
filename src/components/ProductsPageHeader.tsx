@@ -26,25 +26,33 @@ export default function ProductsPageHeader() {
   }, [searchInput, setSearch]);
 
   return (
-    <header className="bg-white h-[105px] rounded-[10px] px-[30px] flex items-center justify-between shadow-sm gap-4">
-      <div className="flex items-center shrink-0 w-[200px]">
+    <header className="bg-white rounded-[10px] px-4 py-4 sm:px-[30px] sm:h-[105px] flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm gap-4">
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-[24px] font-bold text-[#202020] font-cairo">Товары</h1>
+
+        <button
+          type="button"
+          onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+          className="w-[48px] h-[48px] rounded-full bg-grey-light flex items-center justify-center hover:bg-grey-medium transition-colors border-none p-0 cursor-pointer sm:hidden"
+        >
+          <User className="w-6 h-6 text-grey-dark" />
+        </button>
       </div>
 
-      <div className="flex-1 max-w-[1023px] flex items-center justify-center">
-        <div className="bg-[#f3f3f3] rounded-[8px] px-[20px] py-[12px] flex items-center gap-[8px] w-full">
-          <Search className="w-6 h-6 text-grey-medium" />
+      <div className="w-full flex items-center justify-center sm:flex-1 sm:max-w-[1023px]">
+        <div className="bg-[#f3f3f3] rounded-[8px] px-[16px] sm:px-[20px] py-[12px] flex items-center gap-[8px] w-full">
+          <Search className="w-6 h-6 text-grey-medium shrink-0" />
           <input
             type="text"
             placeholder="Найти"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="bg-transparent border-none outline-none flex-1 text-[14px] text-[#232323] placeholder-[#999]"
+            className="bg-transparent border-none outline-none min-w-0 flex-1 text-[14px] text-[#232323] placeholder-[#999]"
           />
         </div>
       </div>
 
-      <div className="relative shrink-0 flex items-center justify-end w-[200px]">
+      <div className="relative shrink-0 hidden sm:flex items-center justify-end w-[200px]">
         <button
           type="button"
           onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -52,26 +60,26 @@ export default function ProductsPageHeader() {
         >
           <User className="w-6 h-6 text-grey-dark" />
         </button>
-
-        {isUserMenuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setIsUserMenuOpen(false)}
-              aria-hidden
-            />
-            <div className="absolute top-[55px] right-0 w-48 bg-white rounded-md shadow-lg py-1 border border-grey-light z-50 animate-in fade-in zoom-in-95 duration-200">
-              <button
-                type="button"
-                onClick={logout}
-                className="w-full text-left px-4 py-2 text-sm text-[#f11010] hover:bg-grey-light transition-colors border-none bg-transparent cursor-pointer font-medium"
-              >
-                Выйти
-              </button>
-            </div>
-          </>
-        )}
       </div>
+
+      {isUserMenuOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setIsUserMenuOpen(false)}
+            aria-hidden
+          />
+          <div className="absolute top-[72px] right-4 sm:top-[55px] sm:right-0 w-48 bg-white rounded-md shadow-lg py-1 border border-grey-light z-50 animate-in fade-in zoom-in-95 duration-200">
+            <button
+              type="button"
+              onClick={logout}
+              className="w-full text-left px-4 py-2 text-sm text-[#f11010] hover:bg-grey-light transition-colors border-none bg-transparent cursor-pointer font-medium"
+            >
+              Выйти
+            </button>
+          </div>
+        </>
+      )}
     </header>
   );
 }

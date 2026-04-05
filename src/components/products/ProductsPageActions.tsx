@@ -61,7 +61,7 @@ export default function ProductsPageActions({
   );
 
   return (
-    <div className="flex items-start sm:items-center justify-between gap-3">
+    <div className="flex items-start sm:items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
       <div className="flex flex-col gap-1">
         <h2 className="text-[20px] font-bold text-[#333] font-cairo">Все позиции</h2>
         <p className="text-[13px] text-grey-medium sm:hidden">
@@ -70,7 +70,7 @@ export default function ProductsPageActions({
         </p>
       </div>
 
-      <div className="flex items-center gap-[8px] shrink-0">
+      <div className="flex items-center gap-[8px] shrink-0 max-w-full">
         <button
           type="button"
           onClick={onRefresh}
@@ -82,7 +82,7 @@ export default function ProductsPageActions({
           />
         </button>
 
-        <div className="relative flex items-center gap-[8px]" ref={popupRef}>
+        <div className="relative flex items-center gap-[8px] max-w-full" ref={popupRef}>
           <button
             type="button"
             onClick={onOpenAddModal}
