@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "e7babb077d50cd88fb8c0e168373c8a560d056b540f364cb4892191bf524f5ee"
     },
+    "playwright-generate-test": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "computedHash": "8f963da3e25f705ff39755b8b990f20da0c0320cb86ac83fcc4d2d4eca91f6e4"
+    },
     "suggest-lucide-icons": {
       "source": "nweii/agent-stuff",
       "sourceType": "github",
